@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>for you</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="weather" aria-hidden="true">
+    <div class="frost"></div>
+    <div class="heat"></div>
+    <div class="glow"></div>
+    <canvas id="particles"></canvas>
+  </div>
+  <div id="fx" aria-hidden="true"></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="shimmer" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.06" numOctaves="2" seed="3" result="noise">
+        <animate attributeName="baseFrequency" dur="3s" values="0.012 0.06;0.016 0.09;0.012 0.06" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap id="shimmerMap" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
+  <audio id="music" src="music.mp3" loop preload="auto"></audio>
+  <button class="music-btn" id="musicBtn" hidden aria-label="Mute music" aria-pressed="false">♪</button>
+
+  <main>
+    <section class="game" id="game2">
+      <h2 class="game-title">ok now guess when I'm leaving</h2>
+
+      <div class="calendar">
+        <div class="cal-pin"></div>
+        <p class="cal-month"></p>
+        <div class="cal-grid"></div>
+      </div>
+
+      <div class="thermo" aria-hidden="true">
+        <span class="t-end">cold</span>
+        <div class="t-bar"><div class="t-marker"></div></div>
+        <span class="t-end">hot</span>
+      </div>
+
+      <p class="feedback" aria-live="polite"></p>
+
+      <a class="again" id="again" href="index.html">back to start ❤️</a>
+    </section>
+  </main>
+
+  <script src="common.js"></script>
+  <script src="leaving.js"></script>
+</body>
+</html>

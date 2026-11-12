@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>for you</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="locked">
+  <!-- hot / cold weather that washes over the page -->
+  <div id="weather" aria-hidden="true">
+    <div class="frost"></div>
+    <div class="heat"></div>
+    <div class="glow"></div>
+    <canvas id="particles"></canvas>
+  </div>
+  <div id="fx" aria-hidden="true"></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="shimmer" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.06" numOctaves="2" seed="3" result="noise">
+        <animate attributeName="baseFrequency" dur="3s" values="0.012 0.06;0.016 0.09;0.012 0.06" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap id="shimmerMap" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
+  <p class="note" id="note">click to open</p>
+
+  <audio id="music" src="music.mp3" loop preload="auto"></audio>
+  <button class="music-btn" id="musicBtn" hidden aria-label="Mute music" aria-pressed="false">♪</button>
+
+  <main>
+    <!-- the letter (starts folded; the script builds the folds) -->
+    <section class="letter-spot">
+      <div class="letter-wrap" id="letterWrap">
+        <article class="sheet photo-sheet hide" id="sheet">
+          <img id="letterImg" src="letter.jpg" draggable="false"
+               alt="Handwritten letter: Happy anniversary my Aru baby! Hi my beautiful wife, I know you want me to write a letter and nothing materialistic this time, so here it is. Baby, it's already been 5 months since we met and every day since then I have grown to love you even more. You make me so happy baby, and I know the distance is hard, but you're all I want forever jaan. I'm so obsessed with you. You're the cutest, most beautiful, lovely, pyaari biwi ever and I'm so grateful to be with you. I love you my Aru baby! Aapka Udu" />
+        </article>
+      </div>
+      <p class="letter-note" id="letterNote">See written in red for my biwi ❤️❤️</p>
+    </section>
+
+    <div id="after" hidden>
+      <!-- the photo, on its own -->
+      <section class="photo-spot" id="photoSpot">
+        <div class="photo" id="photo" tabindex="0" role="button" aria-label="Video of us. Click to turn it over.">
+          <div class="photo-inner">
+            <div class="photo-front">
+              <div class="heart-frame">
+                <div class="heart-photo">
+                  <video id="photoVideo" src="video.mp4" muted loop playsinline preload="auto"></video>
+                  <div class="print-empty">video<br />goes here</div>
+                </div>
+              </div>
+            </div>
+            <div class="photo-back">
+              <div class="heart-frame back-frame"><p id="photoBack"></p></div>
+            </div>
+          </div>
+        </div>
+        <div class="caption-note">
+          <svg viewBox="0 0 80 50" aria-hidden="true">
+            <path d="M76 40 C60 42 40 36 26 24 C20 19 15 13 11 6" />
+            <path d="M4 13 C7 10 9 7 11 5 C14 8 17 10 21 11" />
+          </svg>
+          <p id="caption"></p>
+          <p class="small">(turn it over)</p>
+          <button class="sound" id="soundBtn" aria-pressed="false">🔈 tap for sound</button>
+        </div>
+      </section>
+
+      <!-- two more of us -->
+      <section class="pics" id="pics">
+        <figure class="pic pic-a">
+          <div class="pic-print">
+            <img src="us-ghibli.jpg" alt="The two of us drawn in a Studio Ghibli style" loading="lazy" />
+            <figcaption>us in ghibli ❤️</figcaption>
+          </div>
+        </figure>
+        <figure class="pic pic-b">
+          <div class="pic-print">
+            <img src="us-at-70.jpg" alt="The two of us imagined at 70, grey-haired and smiling" loading="lazy" />
+            <figcaption>us at 70 ❤️</figcaption>
+          </div>
+        </figure>
+      </section>
+
+      <!-- guess the date -->
+      <section class="game" id="game">
+        <h2 class="game-title">time to reveal when I'll come jaanuuu ❤️❤️</h2>
+        <p class="game-sub">pick a day and I'll tell you if you're hot or cold</p>
+
+        <div class="calendar" id="calendar">
+          <div class="cal-pin"></div>
+          <p class="cal-month" id="calMonth"></p>
+          <div class="cal-grid" id="calGrid"></div>
+        </div>
+
+        <div class="thermo" aria-hidden="true">
+          <span class="t-end">cold</span>
+          <div class="t-bar"><div class="t-marker" id="tMarker"></div></div>
+          <span class="t-end">hot</span>
+        </div>
+
+        <p class="feedback" id="feedback" aria-live="polite"></p>
+
+        <!-- appears once she guesses the right day -->
+        <div class="countdown-wrap" id="countdownWrap" hidden>
+          <p class="cd-label">see you in</p>
+          <div class="board">
+            <div class="unit" data-unit="days"><div class="digits"></div><p class="unit-label">days</p></div>
+            <span class="colon">:</span>
+            <div class="unit" data-unit="hours"><div class="digits"></div><p class="unit-label">hours</p></div>
+            <span class="colon">:</span>
+            <div class="unit" data-unit="mins"><div class="digits"></div><p class="unit-label">minutes</p></div>
+            <span class="colon">:</span>
+            <div class="unit" data-unit="secs"><div class="digits"></div><p class="unit-label">seconds</p></div>
+          </div>
+        </div>
+
+        <!-- goes to the second page: "now guess when I'm leaving" -->
+        <a class="again" id="again" href="leaving.html">back to start ❤️</a>
+      </section>
+    </div>
+  </main>
+
+  <script src="common.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
